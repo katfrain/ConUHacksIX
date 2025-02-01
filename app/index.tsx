@@ -35,17 +35,12 @@ export default function App() {
     }, []);
 
     return (
-        <NavigationIndependentTree>
-            <NavigationContainer>
                 <Stack.Navigator initialRouteName="LogIn">
                     {user ? (
                         <Stack.Screen name={"Home"} component={InsideLayout} options={{headerShown:false}} />
                         ) : (
                         <Stack.Screen name={"LogIn"} component={Login} />
                     )}
-
                 </Stack.Navigator>
-            </NavigationContainer>
-        </NavigationIndependentTree>
     )
 }

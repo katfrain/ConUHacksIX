@@ -50,12 +50,12 @@ const Login = () => {
                 <TextInput
                     value={email}
                     style={styles.input}
-                    placeholder={"netname@concordia.ca"}
+                    placeholder={"netname@live.concordia.ca"}
                     autoCapitalize={"none"}
                     onChangeText={(text) => setEmail(text)}
                     onBlur={() => {
                         if(!emailRegex.test(email)){
-                            alert('Email address ending in @concordia.ca is required!');
+                            alert('Email address ending in @live.concordia.ca is required!');
                             setEmail('');
                         }
                     }
