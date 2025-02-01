@@ -1,6 +1,9 @@
 import { Text, View } from "react-native";
+import createItem from "@/Services/Items/MarketItem";
 
 export default function Index() {
+    createItem()
+        .catch((error) => console.error('Error creating item:', error));
   return (
     <View
       style={{

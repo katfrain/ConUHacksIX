@@ -1,13 +1,15 @@
 //This will be to read and write data to firebase
+import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import { getDatabase, ref, onValue } from "firebase/database";
+import {db} from '@/Configurations/FirebaseConfig'
 
-import firestore from "@react-native-firebase/firestore";
 
 const now = new Date();
-const time = new Date.now();
+const time =  Date.now();
 
 async function createItem(){
     try {
-        await firestore().collection('items').add({
+        await addDoc(collection(db,'items'),{
             title: 'computer',
             Date: now.toString(),
             Time: time.toString(),
@@ -20,5 +22,26 @@ async function createItem(){
     }
 }
 
-export default createItem;
+const dg = getDatabase();
+const starCountRef = ref(dg, 'posts/' + postId + '/starCount');
 
+async function pullItem() {
+    try {
+        //this pulls the collection
+        const data = collection(db, 'items');
+        //pulls a snapshot of the collection
+        const querySnapshot = await getDocs(data);
+
+        const items = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            doc: doc.data(),
+        }));
+        console.log('Retrieved Items:', items);
+        return items;
+    } catch (error) {
+        console.log('error pulling document', error);
+    }
+}
+
+
+export default createItem; pullItem;
