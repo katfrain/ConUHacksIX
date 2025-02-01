@@ -1,3 +1,6 @@
+import * as React from 'react';
+import { Text, View } from "react-native";
+import NavBar from './NavBar';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {NavigationContainer, NavigationIndependentTree} from "@react-navigation/native";
 import tempHome from "@/app/screens/tempHome"
@@ -6,25 +9,11 @@ import {useEffect, useState} from "react";
 import {onAuthStateChanged, User} from "@firebase/auth";
 import {FIREBASE_AUTH} from "@/Configurations/FirebaseConfig";
 
-const Stack = createNativeStackNavigator()
-import {createItem, pullItem} from "@/Services/Items/MarketItem";
+const Stack = createNativeStackNavigator();
 
-// ------------------------ this is just for testing after login
-// its equivalent (navigation) can, and should be, moved to a different file in our navigation folder later on
-const InsideStack = createNativeStackNavigator()
-
-function InsideLayout() {
-    return(
-        <InsideStack.Navigator>
-            <InsideStack.Screen name="tempHome" component={tempHome} />
-        </InsideStack.Navigator>
-    )
-}
-// ------------------------
-
-
-export default function App() {
+export default function Index() {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
     createItem()
         .catch((error) => console.error('Error creating item:', error));
@@ -32,19 +21,27 @@ export default function App() {
         .catch((error) => console.error('Error pulling item:', error));
 
     useEffect(() => {
-        onAuthStateChanged(FIREBASE_AUTH, (user) => {
-            console.log('user', user);
+        const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
+            console.log('User:', user);
             setUser(user);
+            setLoading(false);
         });
+
+        return unsubscribe; // Cleanup function to prevent memory leaks
     }, []);
 
+    if (loading) {
+        return null; // Or a loading spinner
+    }
+
     return (
-                <Stack.Navigator initialRouteName="LogIn">
-                    {user ? (
-                        <Stack.Screen name={"Home"} component={InsideLayout} options={{headerShown:false}} />
-                        ) : (
-                        <Stack.Screen name={"LogIn"} component={Login} />
-                    )}
-                </Stack.Navigator>
-    )
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                {user ? (
+                    <Stack.Screen name="Home" component={NavBar} />
+                ) : (
+                    <Stack.Screen name="LogIn" component={Login} />
+                )}
+            </Stack.Navigator>
+    );
 }
+
