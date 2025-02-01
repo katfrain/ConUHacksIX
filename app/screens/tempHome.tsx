@@ -1,6 +1,7 @@
 import {View, Text, StyleSheet, Button, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FIREBASE_AUTH} from "@/Configurations/FirebaseConfig";
+import {pullItem} from "@/Services/Items/MarketItem";
 
 
 const tempHome = () => {
@@ -8,7 +9,11 @@ const tempHome = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
-
+    // useEffect runs once when the component mounts
+        async function displayItems() {
+            const items = await pullItem();
+            console.log(items);
+        }
     return (
         <View style={styles.container}>
             <TextInput
@@ -26,6 +31,7 @@ const tempHome = () => {
                 onChangeText={(text) => setDescription(text)}
             ></TextInput>
             <Button title="Sign Out" onPress={() => FIREBASE_AUTH.signOut()}></Button>
+
         </View>
     )
 }

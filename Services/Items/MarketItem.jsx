@@ -22,9 +22,6 @@ async function createItem(){
     }
 }
 
-const dg = getDatabase();
-const starCountRef = ref(dg, 'posts/' + postId + '/starCount');
-
 async function pullItem() {
     try {
         //this pulls the collection
@@ -38,10 +35,11 @@ async function pullItem() {
         }));
         console.log('Retrieved Items:', items);
         return items;
+
     } catch (error) {
         console.log('error pulling document', error);
     }
 }
 
 
-export default createItem; pullItem;
+export {createItem, pullItem};

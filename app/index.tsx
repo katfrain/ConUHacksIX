@@ -7,7 +7,7 @@ import {onAuthStateChanged, User} from "@firebase/auth";
 import {FIREBASE_AUTH} from "@/Configurations/FirebaseConfig";
 
 const Stack = createNativeStackNavigator()
-import createItem from "@/Services/Items/MarketItem";
+import {createItem, pullItem} from "@/Services/Items/MarketItem";
 
 // ------------------------ this is just for testing after login
 // its equivalent (navigation) can, and should be, moved to a different file in our navigation folder later on
@@ -25,8 +25,12 @@ function InsideLayout() {
 
 export default function App() {
     const [user, setUser] = useState<User | null>(null);
+
     createItem()
         .catch((error) => console.error('Error creating item:', error));
+    pullItem()
+        .catch((error) => console.error('Error pulling item:', error));
+
     useEffect(() => {
         onAuthStateChanged(FIREBASE_AUTH, (user) => {
             console.log('user', user);
