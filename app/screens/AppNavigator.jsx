@@ -19,7 +19,7 @@ const AppNavigator = () => {
                   fontFamily: 'FredokaOne_400Regular',
               },
               headerBackTitleStyle: {
-                  fontFamily: 'Cabin', // Ensures back button text uses the same font
+                  fontFamily: 'CabinAppNavigator.jsx', // Ensures back button text uses the same font
                   fontSize: 18,
               },
               headerTintColor: "#85A3BD",

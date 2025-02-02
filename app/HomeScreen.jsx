@@ -25,11 +25,6 @@ const HomeScreen = () => {
                 contentContainerStyle={{
                     paddingBottom: 50,
                     flexGrow: 1,
-                    // shadowColor: "#000",
-                    // shadowOpacity: 0.2,
-                    // shadowRadius: 3,
-                    // elevation: 3,
-                    // shadowOffset: {width: -2, height: 4},
                 }}
                 showsVerticalScrollIndicator={false}
             />

@@ -7,6 +7,7 @@ import Search from '../screens/Search'
 import AddProduct from '../screens/AddProduct'
 import Messages from '../screens/Messages'
 import Profile from '../screens/Profile'
+import AppNavigatorProfile from "@/app/screens/AppNavigatorProfile";
 
 
 const Tab = createBottomTabNavigator();
@@ -120,7 +121,7 @@ function NavBar() {
             />
             <Tab.Screen
                 name="Profile"
-                component={Profile}
+                component={AppNavigatorProfile}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
