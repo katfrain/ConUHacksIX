@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
-  ScrollView,
+  ScrollView, SafeAreaView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FIREBASE_STORAGE } from "@/Configurations/FirebaseConfig";
@@ -78,7 +78,7 @@ const AddProduct = () => {
   };
 
   return (
-    <View style={styles.screenContainer}>
+    <SafeAreaView style={styles.screenContainer}>
       {/* Scrollable content */}
       <ScrollView contentContainerStyle={styles.contentContainer}>
         <Text style={styles.header}>Create New Post</Text>
@@ -100,7 +100,6 @@ const AddProduct = () => {
 
         {/* Toggle between Free and Trade */}
         <View style={styles.typeContainer}>
-          <Text style={styles.label}>Type:</Text>
           <TouchableOpacity
             style={[styles.typeButton, free && styles.typeButtonSelected]}
             onPress={() => setFree(true)}
@@ -142,7 +141,7 @@ const AddProduct = () => {
           <Text style={styles.submitButtonText}>Submit Post</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -155,13 +154,22 @@ const styles = StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     alignItems: "center",
-    padding: 20,
+    margin: 20,
+    marginBottom: 170,
+    backgroundColor: "#545E66",
+    borderRadius: 10,
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    backgroundColor: "#545E66",
+    padding: 20,
+    width: "100%",
+    borderRadius: 10,
+    color: "#FFF6DA",
+    fontFamily: "FredokaOne_400Regular"
   },
   input: {
     width: "80%",
@@ -170,10 +178,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
+    color: "#FFF6DA",
   },
   multilineInput: {
     height: 100,
     textAlignVertical: "top",
+    color: "#FFF6DA",
   },
   typeContainer: {
     width: "80%",
@@ -181,10 +191,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
     justifyContent: "center",
+    color: "#FFF6DA",
   },
   label: {
     fontSize: 16,
     marginRight: 10,
+    color: "#FFF6DA",
   },
   typeButton: {
     paddingVertical: 8,
@@ -193,22 +205,26 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     marginHorizontal: 5,
+    color: "#FFF6DA",
   },
   typeButtonSelected: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#85A2BD",
   },
   typeButtonText: {
     fontSize: 16,
+    color: "#FFF6DA",
+    fontFamily: "Cabin"
   },
   addPhotoButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: "#85A2BD",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 5,
     marginBottom: 20,
   },
   addPhotoButtonText: {
-    fontSize: 16,
+      color: "#FFF6DA",
+      fontFamily: "Cabin"
   },
   photoContainer: {
     width: "80%",
@@ -233,7 +249,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   submitButton: {
-    backgroundColor: "blue",
+    backgroundColor: "#85A3BD",
     paddingVertical: 15,
     borderRadius: 10,
     alignItems: "center",

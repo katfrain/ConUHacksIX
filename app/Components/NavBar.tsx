@@ -85,7 +85,7 @@ function NavBar() {
                                     width: 65,
                                     height: 65,
                                     padding: 10,
-                                    tintColor: focused ? '#545E66' : '#FFF6DA',
+                                    tintColor: focused ? '#85A2BD' : '#FFF6DA',
                                     backgroundColor: '#A94A4A',
                                     borderRadius: 10,
                                 }}
