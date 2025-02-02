@@ -4,6 +4,7 @@ import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet,
 import * as ImagePicker from "expo-image-picker";
 import { FIREBASE_STORAGE, FIREBASE_FIRESTORE } from "@/Configurations/FirebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import createItem from "@/app/services/item";
 
 
 
@@ -11,9 +12,10 @@ const AddProduct = () => {
   // for product doc (firebase)
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("free");
+  const [freeStat, setFreeStat] = useState("");
   const [img, setImg] = useState<string | null>(null);
 
+  const [type, setType] = useState("free");
   const [photo, setPhoto] = useState<string | null>(null); // for UI
   const [imageUri, setImageUri] = useState<string | null>(null); // for making blob
 
@@ -38,8 +40,6 @@ const AddProduct = () => {
       setImageUri(result.assets[0].uri);
     }
 
-
-
   };
 
   const uploadData = async () => {
@@ -55,26 +55,25 @@ const AddProduct = () => {
     const downloadUrl = await getDownloadURL(storageRef);
     setImg(downloadUrl);
 
+    if(!img) return;
+
+    await createItem({ title, img, description, freeStat:false})
 
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
 
-    const newProduct = {
-      title,
-      description,
-      type,
-      photo,
-    };
+    await uploadData();
 
-    uploadData();
+    console.log("New product created:", title);
 
-    console.log("New product created:", newProduct);
-    // Reset form (optional)
+
+    // Reset form
     setTitle("");
     setDescription("");
     setType("free");
     setPhoto(null);
+    alert("Successfully uploaded!");
   };
 
   return (
