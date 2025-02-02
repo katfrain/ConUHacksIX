@@ -1,12 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { View, Text } from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import { Image } from 'react-native';
-import Home from './Home'
-import Search from './Search'
-import AddProduct from './AddProduct'
-import Messages from './Messages'
-import Profile from './Profile'
+import Home from '../screens/Home'
+import Search from '../screens/Search'
+import AddProduct from '../screens/AddProduct'
+import Messages from '../screens/Messages'
+import Profile from '../screens/Profile'
 
 
 const Tab = createBottomTabNavigator();
@@ -19,10 +19,14 @@ function NavBar() {
                 tabBarStyle: {
                     position: 'absolute',
                     margin: 20,
-                    elevation: 0,
                     backgroundColor: '#545E66',
                     borderRadius: 10,
-                    height: 60,
+                    height: 40,
+                    bottom: 20,
+                    shadowColor: '#171717',
+                    shadowOffset: {width: -2, height: 4},
+                    shadowOpacity: 0.4,
+                    shadowRadius: 4,
                 },
             }}
         >
@@ -31,13 +35,13 @@ function NavBar() {
                 component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{alignItems: 'center', justifyContent: 'center', transform: [{ translateY: 10 }]}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/images/HomeIcon.png')}
+                                source={require('../../assets/images/HomeIcon.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 35,
-                                    height: 35,
+                                    width: 26,
+                                    height: 26,
                                     tintColor: focused ? '#85A3BD' : '#FFF6DA',
                                 }}
                             >
@@ -52,13 +56,13 @@ function NavBar() {
                 component={Search}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{alignItems: 'center', justifyContent: 'center', transform: [{ translateY: 10 }]}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/images/SearchIcon.png')}
+                                source={require('../../assets/images/SearchIcon.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 35,
-                                    height: 35,
+                                    width: 26,
+                                    height: 26,
                                     tintColor: focused ? '#85A3BD' : '#FFF6DA',
                                 }}
                             >
@@ -73,17 +77,16 @@ function NavBar() {
                 component={AddProduct}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{alignItems: 'center', justifyContent: 'center', transform: [{ translateY: 10 }]}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/images/PlusIcon.png')}
+                                source={require('../../assets/images/PlusIcon.png')}
                                 resizeMode="contain"
                                 style={{
                                     width: 65,
                                     height: 65,
                                     padding: 10,
                                     tintColor: focused ? '#545E66' : '#FFF6DA',
-                                    backgroundColor: '#85A3BD',
-                                    transform: [{ translateY: -15 }],
+                                    backgroundColor: '#A94A4A',
                                     borderRadius: 10,
                                 }}
                             >
@@ -98,13 +101,13 @@ function NavBar() {
                 component={Messages}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{alignItems: 'center', justifyContent: 'center', transform: [{ translateY: 10 }]}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/images/ChatIcon.png')}
+                                source={require('../../assets/images/ChatIcon.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 35,
-                                    height: 35,
+                                    width: 26,
+                                    height: 26,
                                     tintColor: focused ? '#85A3BD' : '#FFF6DA',
                                 }}
                             >
@@ -119,13 +122,13 @@ function NavBar() {
                 component={Profile}
                 options={{
                     tabBarIcon: ({ focused }) => (
-                        <View style={{alignItems: 'center', justifyContent: 'center', transform: [{ translateY: 10 }]}}>
+                        <View style={{alignItems: 'center', justifyContent: 'center'}}>
                             <Image
-                                source={require('../assets/images/ProfileIcon.png')}
+                                source={require('../../assets/images/ProfileIcon.png')}
                                 resizeMode="contain"
                                 style={{
-                                    width: 35,
-                                    height: 35,
+                                    width: 26,
+                                    height: 26,
                                     tintColor: focused ? '#85A3BD' : '#FFF6DA',
                                 }}
                             >
@@ -140,3 +143,22 @@ function NavBar() {
 }
 
 export default NavBar;
+const styles = StyleSheet.create({
+    tabContainer: {
+        position: 'absolute',
+        margin: 20,
+        backgroundColor: '#545E66',
+        borderRadius: 10,
+        height: 40,
+        bottom: 20
+    },
+
+    shadowProp: {
+        shadowColor: '#171717',
+        shadowOffset: {width: -2, height: 4},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+    },
+
+})
+
