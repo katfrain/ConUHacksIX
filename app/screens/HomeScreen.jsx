@@ -8,15 +8,16 @@ import {
     StyleSheet,
     FlatList,
     ActivityIndicator,
+    SafeAreaView,
 } from "react-native";
 import { getAuth } from "firebase/auth";
 import { pullNonUserItem } from "@/app/services/item";
+import {useNavigation} from "@react-navigation/native";
 
 const MainScreen = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
-
 
     const fetchPosts = async () => {
         setLoading(true);
@@ -37,45 +38,82 @@ const MainScreen = () => {
     }, []);
 
 
-    const PostItem = ({ item }) => (
-        <View style={styles.postContainer}>
-            <Text style={styles.title}>{item.title}</Text>
-            <Text style={styles.description}>{item.description}</Text>
-            <Text style={styles.date}>{item.date} - {item.time}</Text>
+    const PostItem = ({item}) => {
 
-            {/* Display images if available */}
-            {item.imgs && item.imgs.length > 0 ? (
-                <FlatList
-                    data={item.imgs}
-                    keyExtractor={(img, index) => index.toString()}
-                    horizontal
-                    renderItem={({ item: img }) => (
-                        <Image source={{ uri: img }} style={styles.image} />
+        const navigation = useNavigation();
+        const containerColor = item.type === "trade" ? "#D0845F" : "#40A671";
+
+        const handlePress = () => {
+            // Navigate to the post detail scren and pass the item as a parameter
+            navigation.navigate("Post", { item });
+        };
+
+        return (
+            <TouchableOpacity
+                onPress={handlePress}
+                style={{ width: "47%", marginVertical: 10, marginHorizontal: 5 }}
+            >
+                <View style={styles.card}>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+                            {item.title}
+                        </Text>
+                    </View>
+
+                    {item.imgs && item.imgs.length > 0 ? (
+                        <Image
+                            source={{uri: Array.isArray(item.imgs) ? item.imgs[0] : item.imgs}}
+                            style={styles.image}
+                        />
+                    ) : (
+                        <Text>No images available</Text>
                     )}
-                />
-            ) : (
-                <Text>No images available</Text>
-            )}
-        </View>
+
+                    <View style={[styles.typeContainer, { backgroundColor: containerColor, borderRadius: 20 }]}
+                    >
+                        <Text style={styles.freestat}>
+                            {item.freestat ?  "Trade" : "Free"}
+                        </Text>
+                    </View>
+
+
+
+                </View>
+            </TouchableOpacity>
     );
+}
 
     return (
-        <View style={styles.container}>
-            {loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
-            ) : items.length === 0 ? (
-                <Text style={styles.noPosts}>You haven't posted anything yet!</Text>
-            ) : (
-                <FlatList
-                    data={items}
-                    keyExtractor={(item) => (item.id ? item.id.toString() : '')}
-                    renderItem={({ item }) => <PostItem item={item} />}
-                    refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-                    }
-                />
-            )}
-        </View>
+        <SafeAreaView style={styles.container}>
+            <View >
+                {loading ? (
+                    <ActivityIndicator size="large" color="#0000ff" />
+                ) : items.length === 0 ? (
+                    <Text style={styles.noPosts}>You haven't posted anything yet!</Text>
+                ) : (
+                    <FlatList
+                        data={items}
+                        keyExtractor={(item) => (item.id ? item.id.toString() : '')}
+                        renderItem={({ item }) => <PostItem item={item} />}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                        }
+                        numColumns={2}
+                        columnWrapperStyle={styles.columnWrapper}
+                        contentContainerStyle={{
+                            paddingBottom: 50,
+                            flexGrow: 1,
+                            // shadowColor: "#000",
+                            // shadowOpacity: 0.2,
+                            // shadowRadius: 3,
+                            // elevation: 3,
+                            // shadowOffset: {width: -2, height: 4},
+                        }}
+                        showsVerticalScrollIndicator={false}
+                    />
+                )}
+            </View>
+        </SafeAreaView>
     );
 };
 
@@ -86,15 +124,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     postContainer: {
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#fff",
         padding: 15,
         borderRadius: 10,
         marginBottom: 10,
         elevation: 3,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: "bold",
     },
     description: {
         fontSize: 14,
@@ -105,16 +139,46 @@ const styles = StyleSheet.create({
         color: "gray",
         marginTop: 5,
     },
-    image: {
-        width: 100,
-        height: 100,
-        marginRight: 10,
-        borderRadius: 8,
-    },
     noPosts: {
         textAlign: "center",
         fontSize: 16,
         color: "gray",
+    },
+    card: {
+        backgroundColor: "#fff",
+        borderRadius: 10,
+        marginVertical: 5,
+        marginHorizontal: 10,
+        overflow: "hidden",
+        position: "relative",
+    },
+    image: {
+        width: "100%",
+        height: 150,
+        borderRadius: 10,
+    },
+    typeContainer: {
+        position: "absolute",
+        alignSelf: "flex-end",
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        top: 8,
+        right: 10,
+        borderRadius: 5,
+    },
+    freestat: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "white",
+    },
+    infoContainer: {
+        paddingTop: 10,
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: "bold",
+        fontFamily: 'Cabin',
+        color: '#545E66',
     },
 });
 
