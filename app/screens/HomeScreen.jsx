@@ -93,7 +93,7 @@ const MainScreen = () => {
                     style={{ color: '#FFF6DA', fontSize: 24, transform: [{ translateY: -100 }], marginHorizontal: 50, fontFamily: 'FredokaOne_400Regular'}}
                 >What are you looking for today?</Text>
             </View>
-            <View >
+            <View style = {{flex:1}}>
                 {loading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
                 ) : items.length === 0 ? (
