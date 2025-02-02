@@ -16,6 +16,7 @@ function NavBar() {
         <Tab.Navigator
             screenOptions={{
                 tabBarShowLabel: false,
+                headerShown: false,
                 tabBarStyle: {
                     position: 'absolute',
                     margin: 20,
