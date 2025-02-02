@@ -58,9 +58,7 @@ export async function pullItem(): Promise<ItemType[]> {
         const items: ItemType[] = [];
 
         //querySnapshot.forEach((doc) => {
-        for (let i = 0; i < 5; i++) {
-            console.log ("Block statement execution no." + i);
-            const doc = docs[i];
+        for(var doc of docs){
             const data = doc.data() as ItemType;
             items.push({
                 id: doc.id,
@@ -103,15 +101,7 @@ export async function pullUserItem(): Promise<ItemType[]> {
                 ...data,
             });
         }
-        // for (let i = 0; i < 7; i++) {
-        //     console.log ("Block statement execution no." + i);
-        //     const doc = docs[i];
-        //     const data = doc.data() as ItemType;
-        //     items.push({
-        //         id: doc.id,
-        //         ...data,
-        //     });
-        // }
+
         console.log('Retrieved Items:', items);
         return items;
 
@@ -119,7 +109,6 @@ export async function pullUserItem(): Promise<ItemType[]> {
         console.log('error pulling document', error);
         return [];
     }
-
 }
 
 
