@@ -101,7 +101,6 @@ export async function pullUserItem(): Promise<ItemType[]> {
                 ...data,
             });
         }
-
         console.log('Retrieved Items:', items);
         return items;
 
@@ -109,6 +108,7 @@ export async function pullUserItem(): Promise<ItemType[]> {
         console.log('error pulling document', error);
         return [];
     }
+
 }
 
 export async function pullNonUserItem(): Promise<ItemType[]> {

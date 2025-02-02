@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet, ScrollView
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ScrollView, SafeAreaView,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { FIREBASE_STORAGE, FIREBASE_FIRESTORE } from "@/Configurations/FirebaseConfig";
+import { FIREBASE_STORAGE } from "@/Configurations/FirebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import {createItem} from "@/app/services/item";
-
+import { createItem } from "@/app/services/item";
 
 const AddProduct = () => {
-  // for product doc (firebase)
+  // State variables
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [free, setFree] = useState(true);
-  const [imageUris, setImageUris] =  useState<string[]>([]); // for making blob
-  const [photos, setPhotos] = useState<string[]>([]); // photos array for UI
+  const [imageUris, setImageUris] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
 
-  // Function to pick an image from the library
+  // Pick an image from the library
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -31,149 +37,166 @@ const AddProduct = () => {
       quality: 1,
     });
 
-    // Make sure `result.assets` exists and is not empty
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setPhotos((prevPhotos) => [...prevPhotos, result.assets[0].uri]);
-      setImageUris((prevUris) => [...prevUris, result.assets[0].uri]); // array of image URIs
+      setImageUris((prevUris) => [...prevUris, result.assets[0].uri]);
     }
   };
 
+  // Upload images and create a new post
   const uploadData = async () => {
-
-    if (!imageUris || imageUris.length===0) return;
-
-    console.log( "uris:" + imageUris);
-
+    if (!imageUris || imageUris.length === 0) return;
     let uploadedImages: string[] = [];
 
-    // upload every image and store the reference
-    for(var imageUri of imageUris) {
+    for (const imageUri of imageUris) {
       const response = await fetch(imageUri);
-
       const blob = await response.blob();
       const fileName = `images/${Date.now()}.jpg`;
       const storageRef = ref(FIREBASE_STORAGE, fileName);
       await uploadBytes(storageRef, blob);
-
       const downloadUrl = await getDownloadURL(storageRef);
       uploadedImages.push(downloadUrl);
     }
 
+    if (!uploadedImages || uploadedImages.length === 0) return;
+    await createItem({ title, imgs: uploadedImages, description, free });
+  };
 
-    if(!uploadedImages || uploadedImages.length === 0) return;
-    console.log("uploaded imgs: " +uploadedImages);
-    await createItem({ title, imgs: uploadedImages, description, free})
-
-  }
-
+  // Handle submit
   const handleSubmit = async () => {
-
     await uploadData();
+    alert(
+      `Product "${title}" added successfully!\nLook for it in your profile.`
+    );
 
-    console.log("New product created:", title);
-
-    // reset form
+    // Reset form fields
     setTitle("");
     setDescription("");
     setFree(true);
     setPhotos([]);
     setImageUris([]);
-
-    alert("Product \"" + title + "\" added successfully! \n Look for it in your profile.");
-
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Create New Post</Text>
+    <SafeAreaView style={styles.screenContainer}>
+      {/* Scrollable content */}
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        <Text style={styles.header}>Create New Post</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Title"
-        value={title}
-        onChangeText={setTitle}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Title"
+          value={title}
+          onChangeText={setTitle}
+        />
 
-      <TextInput
-        style={[styles.input, styles.multilineInput]}
-        placeholder="Description"
-        value={description}
-        onChangeText={setDescription}
-        multiline
-      />
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Description"
+          value={description}
+          onChangeText={setDescription}
+          multiline
+        />
 
-      {/* Type selection */}
-      <View style={styles.typeContainer}>
-        <Text style={styles.label}>Type:</Text>
-        <TouchableOpacity
-          style={[
-            styles.typeButton,
-            free === true && styles.typeButtonSelected,
-          ]}
-          onPress={() => setFree(true)}
-        >
-          <Text style={styles.typeButtonText}>Free</Text>
+        {/* Toggle between Free and Trade */}
+        <View style={styles.typeContainer}>
+          <TouchableOpacity
+            style={[styles.typeButton, free && styles.typeButtonSelected]}
+            onPress={() => setFree(true)}
+          >
+            <Text style={styles.typeButtonText}>Free</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.typeButton, !free && styles.typeButtonSelected]}
+            onPress={() => setFree(false)}
+          >
+            <Text style={styles.typeButtonText}>Trade</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Button to add photos */}
+        <TouchableOpacity style={styles.addPhotoButton} onPress={pickImage}>
+          <Text style={styles.addPhotoButtonText}>Add Photo</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.typeButton,
-            free === false && styles.typeButtonSelected,
-          ]}
-          onPress={() => setFree(false)}
-        >
-          <Text style={styles.typeButtonText}>Trade</Text>
+
+        {/* A container with a border that wraps the horizontal scroll of photos */}
+        {photos.length > 0 && (
+          <View style={styles.photoContainer}>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+              {photos.map((uri, index) => (
+                <Image
+                  key={index}
+                  source={{ uri }}
+                  style={styles.photoPreview}
+                />
+              ))}
+            </ScrollView>
+          </View>
+        )}
+      </ScrollView>
+
+      {/* Submit button fixed closer to the bottom, but 15% up */}
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+          <Text style={styles.submitButtonText}>Submit Post</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Button to add photos */}
-      <Button title="Add Photo" onPress={pickImage} />
-      <Button title="Submit Post" onPress={handleSubmit} />
-
-      {/* Preview selected photos */}
-      {photos.length > 0 && (
-        <ScrollView horizontal style={styles.photoPreviewContainer}>
-          {photos.map((uri, index) => (
-            <Image key={index} source={{ uri }} style={styles.photoPreview} />
-          ))}
-        </ScrollView>
-      )}
-
-
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  screenContainer: {
     flex: 1,
-    padding: 20,
     backgroundColor: "#fff",
+    position: "relative", // So we can absolutely position buttonContainer
+  },
+  contentContainer: {
+    flexGrow: 1,
+    alignItems: "center",
+    margin: 20,
+    marginBottom: 170,
+    backgroundColor: "#545E66",
+    borderRadius: 10,
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    backgroundColor: "#545E66",
+    padding: 20,
+    width: "100%",
+    borderRadius: 10,
+    color: "#FFF6DA",
+    fontFamily: "FredokaOne_400Regular"
   },
   input: {
+    width: "80%",
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
     marginBottom: 15,
+    color: "#FFF6DA",
   },
   multilineInput: {
     height: 100,
     textAlignVertical: "top",
+    color: "#FFF6DA",
   },
   typeContainer: {
+    width: "80%",
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 15,
+    justifyContent: "center",
+    color: "#FFF6DA",
   },
   label: {
     fontSize: 16,
     marginRight: 10,
+    color: "#FFF6DA",
   },
   typeButton: {
     paddingVertical: 8,
@@ -181,22 +204,60 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginRight: 10,
+    marginHorizontal: 5,
+    color: "#FFF6DA",
   },
   typeButtonSelected: {
-    backgroundColor: "#ddd",
+    backgroundColor: "#85A2BD",
   },
   typeButtonText: {
     fontSize: 16,
+    color: "#FFF6DA",
+    fontFamily: "Cabin"
   },
-  photoPreviewContainer: {
+  addPhotoButton: {
+    backgroundColor: "#85A2BD",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 5,
+    marginBottom: 20,
+  },
+  addPhotoButtonText: {
+      color: "#FFF6DA",
+      fontFamily: "Cabin"
+  },
+  photoContainer: {
+    width: "80%",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    padding: 10,
     marginVertical: 15,
+    alignSelf: "center",
   },
   photoPreview: {
     width: 100,
     height: 100,
     borderRadius: 5,
     marginRight: 10,
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: "15%",
+    left: 0,
+    right: 0,
+    paddingHorizontal: 20,
+  },
+  submitButton: {
+    backgroundColor: "#85A3BD",
+    paddingVertical: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  submitButtonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 

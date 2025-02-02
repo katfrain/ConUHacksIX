@@ -85,6 +85,14 @@ const MainScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={{
+                height: 170,
+            }}>
+                <Image source={require("assets/images/marketplaceImage.png")} />
+                <Text
+                    style={{ color: '#FFF6DA', fontSize: 24, transform: [{ translateY: -100 }], marginHorizontal: 50, fontFamily: 'FredokaOne_400Regular'}}
+                >What are you looking for today?</Text>
+            </View>
             <View >
                 {loading ? (
                     <ActivityIndicator size="large" color="#0000ff" />
