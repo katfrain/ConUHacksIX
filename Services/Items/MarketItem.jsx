@@ -4,10 +4,11 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import {db} from '@/Configurations/FirebaseConfig'
 
 
+
 const now = new Date();
 const time =  Date.now();
 
-async function createItem(){
+async function createeItem(){
     try {
         await addDoc(collection(db,'items'),{
             title: 'computer',
@@ -42,4 +43,4 @@ async function pullItem() {
 }
 
 
-export {createItem, pullItem};
+export {createeItem, pullItem};

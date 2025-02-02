@@ -8,6 +8,7 @@ import Login from "@/app/screens/Login";
 import {useEffect, useState} from "react";
 import {onAuthStateChanged, User} from "@firebase/auth";
 import {FIREBASE_AUTH} from "@/Configurations/FirebaseConfig";
+//import {createItem, pullItem} from "@/Services/Items/MarketItem";
 
 const Stack = createNativeStackNavigator();
 
@@ -15,10 +16,7 @@ export default function Index() {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
-    createItem()
-        .catch((error) => console.error('Error creating item:', error));
-    pullItem()
-        .catch((error) => console.error('Error pulling item:', error));
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (user) => {
