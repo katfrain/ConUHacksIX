@@ -94,6 +94,7 @@ export default function Profile() {
                 // <Button title="Refresh" onPress={handleSubmit} />
             ) : (
                 <FlatList
+                    style={styles.list}
                     data={items}
 
                     keyExtractor={(item) => item.id? item.id.toString() : ''}
@@ -108,18 +109,16 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 10, backgroundColor: "#f9f9f9" },
+    container: { padding: 10, backgroundColor: "#fff", width: "100%", transform: [{translateY: -150}],},
     postContainer: {
         padding: 10,
         marginVertical: 10,
         backgroundColor: "#fff",
         borderRadius: 8,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
     },
+    list: {
 
+    },
     title: { fontSize: 18, fontWeight: "bold" },
     description: { fontSize: 14, marginTop: 5 },
     date: { fontSize: 12, color: "gray", marginTop: 5 },
