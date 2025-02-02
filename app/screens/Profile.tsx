@@ -120,15 +120,18 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: "bold",
+        fontFamily: 'Cabin',
     },
     description: {
         fontSize: 14,
         marginTop: 5,
+        fontFamily: 'Cabin',
     },
     date: {
         fontSize: 12,
         color: "gray",
         marginTop: 5,
+        fontFamily: 'Cabin',
     },
     image: {
         width: 100,
