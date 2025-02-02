@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const ItemCardTest = ({ item }) => {
   const navigation = useNavigation();
-  const containerColor = item.type === "trade" ? "orange" : "green";
+  const containerColor = item.type === "trade" ? "#D0845F" : "#40A671";
 
   const handlePress = () => {
     // Navigate to the post detail scren and pass the item as a parameter
@@ -22,7 +22,7 @@ const ItemCardTest = ({ item }) => {
         />
         {/* Type Box placed below the image */}
         <View
-          style={[styles.typeContainer, { backgroundColor: containerColor }]}
+          style={[styles.typeContainer, { backgroundColor: containerColor, borderRadius: 20 }]}
         >
           <Text style={styles.type}>
             {item.type === "trade" ? "Trade" : "Free"}
@@ -43,18 +43,15 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#fff",
     borderRadius: 10,
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 10,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
     position: "relative",
   },
   image: {
     width: "100%",
     height: 150,
+    borderRadius: 10,
   },
   typeContainer: {
     position: "absolute",
@@ -71,11 +68,13 @@ const styles = StyleSheet.create({
     color: "white",
   },
   infoContainer: {
-    padding: 10,
+    paddingTop: 10,
   },
   title: {
     fontSize: 16,
     fontWeight: "bold",
+    fontFamily: 'Cabin',
+    color: '#545E66',
   },
 });
 

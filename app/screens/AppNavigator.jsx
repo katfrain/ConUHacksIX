@@ -7,7 +7,24 @@ const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   return (
-    <Stack.Navigator>
+      <Stack.Navigator
+          screenOptions={{
+              headerStyle: {
+                  backgroundColor: "#545E66", // Background color of the header
+              },
+              headerTitleStyle: {
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: "#FFF6DA",
+                  fontFamily: 'FredokaOne_400Regular',
+              },
+              headerBackTitleStyle: {
+                  fontFamily: 'Cabin', // Ensures back button text uses the same font
+                  fontSize: 18,
+              },
+              headerTintColor: "#85A3BD",
+          }}
+      >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
