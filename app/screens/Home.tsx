@@ -1,11 +1,11 @@
 import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import AppNavigator from "./AppNavigator";
+import AppNavigatorHome from "./AppNavigatorHome";
 
 export default function Home() {
   return (
     <View style={styles.container}>
-      <AppNavigator />
+      <AppNavigatorHome />
     </View>
   );
 }

@@ -1,12 +1,6 @@
 import * as React from "react";
-import { Text, View } from "react-native";
 import NavBar from "./Components/NavBar";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {
-  NavigationContainer,
-  NavigationIndependentTree,
-} from "@react-navigation/native";
-import tempHome from "@/app/screens/tempHome";
 import Login from "@/app/screens/Login";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "@firebase/auth";
@@ -25,11 +19,11 @@ export default function Index() {
       setLoading(false);
     });
 
-    return unsubscribe; // Cleanup function to prevent memory leaks
+    return unsubscribe;
   }, []);
 
   if (loading) {
-    return null; // Or a loading spinner
+    return null;
   }
 
   return (
