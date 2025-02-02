@@ -6,7 +6,7 @@ import Home from '../screens/Home'
 import Search from '../screens/Search'
 import AddProduct from '../screens/AddProduct'
 import Messages from '../screens/Messages'
-import Profile from '../screens/Profile'
+import {Profile} from '../screens/Profile'
 
 
 const Tab = createBottomTabNavigator();
