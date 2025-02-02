@@ -1,28 +1,25 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ScrollView,
+import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet, ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import { FIREBASE_STORAGE, FIREBASE_FIRESTORE } from "@/Configurations/FirebaseConfig";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {createItem} from "@/app/services/item";
+
 
 const AddProduct = () => {
+  // for product doc (firebase)
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [type, setType] = useState("free");
-  // Explicitly set photos to be an array of strings (URIs)
-  const [photos, setPhotos] = useState<string[]>([]);
+  const [free, setFree] = useState(true);
+  const [imageUris, setImageUris] =  useState<string[]>([]); // for making blob
+  const [photos, setPhotos] = useState<string[]>([]); // photos array for UI
 
   // Function to pick an image from the library
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
+    if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
     }
@@ -37,23 +34,53 @@ const AddProduct = () => {
     // Make sure `result.assets` exists and is not empty
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setPhotos((prevPhotos) => [...prevPhotos, result.assets[0].uri]);
+      setImageUris((prevUris) => [...prevUris, result.assets[0].uri]); // array of image URIs
     }
   };
 
-  const handleSubmit = () => {
-    const newProduct = {
-      title,
-      description,
-      type,
-      photo: photos,
-    };
+  const uploadData = async () => {
 
-    console.log("New product created:", newProduct);
-    // Reset form (optional)
+    if (!imageUris || imageUris.length===0) return;
+
+    console.log( "uris:" + imageUris);
+
+    let uploadedImages: string[] = [];
+
+    // upload every image and store the reference
+    for(var imageUri of imageUris) {
+      const response = await fetch(imageUri);
+
+      const blob = await response.blob();
+      const fileName = `images/${Date.now()}.jpg`;
+      const storageRef = ref(FIREBASE_STORAGE, fileName);
+      await uploadBytes(storageRef, blob);
+
+      const downloadUrl = await getDownloadURL(storageRef);
+      uploadedImages.push(downloadUrl);
+    }
+
+
+    if(!uploadedImages || uploadedImages.length === 0) return;
+    console.log("uploaded imgs: " +uploadedImages);
+    await createItem({ title, imgs: uploadedImages, description, free})
+
+  }
+
+  const handleSubmit = async () => {
+
+    await uploadData();
+
+    console.log("New product created:", title);
+
+    // reset form
     setTitle("");
     setDescription("");
-    setType("free");
+    setFree(true);
     setPhotos([]);
+    setImageUris([]);
+
+    alert("Product \"" + title + "\" added successfully! \n Look for it in your profile.");
+
   };
 
   return (
@@ -81,18 +108,18 @@ const AddProduct = () => {
         <TouchableOpacity
           style={[
             styles.typeButton,
-            type === "free" && styles.typeButtonSelected,
+            free === true && styles.typeButtonSelected,
           ]}
-          onPress={() => setType("free")}
+          onPress={() => setFree(true)}
         >
           <Text style={styles.typeButtonText}>Free</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.typeButton,
-            type === "trade" && styles.typeButtonSelected,
+            free === false && styles.typeButtonSelected,
           ]}
-          onPress={() => setType("trade")}
+          onPress={() => setFree(false)}
         >
           <Text style={styles.typeButtonText}>Trade</Text>
         </TouchableOpacity>
