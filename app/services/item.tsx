@@ -4,7 +4,7 @@ import {getAuth} from 'firebase/auth'
 
 interface Props {
     title: string;
-    img: string;
+    imgs: string[];
     description: string;
     freeStat: boolean;
 }
@@ -12,8 +12,8 @@ interface Props {
 const now = new Date();
 const time =  Date.now();
 
-async function createItem({title,img,description,freeStat}:Props){
-    alert("in creating item");
+export async function createItem({title,imgs,description,freeStat}:Props){
+
     try {
         const auth = getAuth()
         const user = auth.currentUser
@@ -23,7 +23,7 @@ async function createItem({title,img,description,freeStat}:Props){
             title: title,
             Date: now.toString(),
             Time: time.toString(),
-            img: img,
+            imgs: imgs,
             description: description,
             freeStat: freeStat,
         });
@@ -33,4 +33,44 @@ async function createItem({title,img,description,freeStat}:Props){
     }
 }
 
-export default createItem;
+interface ItemType {
+    id?: string; // We'll add the document ID here
+    User: string
+    title: string;
+    date: string;
+    time: string;
+    img: string;
+    description: string;
+    freestat: boolean;
+}
+
+
+export async function pullItem(): Promise<ItemType[]> {
+    try {
+        //this pulls the collection
+        const itemsRef = collection(db, 'items');
+        //pulls a snapshot of the collection
+        const querySnapshot = await getDocs(itemsRef);
+
+        const docs = querySnapshot.docs;
+
+        const items: ItemType[] = [];
+
+        //querySnapshot.forEach((doc) => {
+        for (let i = 0; i < 3; i++) {
+            console.log ("Block statement execution no." + i);
+            const doc = docs[i];
+            const data = doc.data() as ItemType;
+            items.push({
+                id: doc.id,
+                ...data,
+            });
+        }
+        console.log('Retrieved Items:', items);
+        return items;
+
+    } catch (error) {
+        console.log('error pulling document', error);
+        return [];
+    }
+}

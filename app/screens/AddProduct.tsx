@@ -4,7 +4,7 @@ import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet, Scro
 import * as ImagePicker from "expo-image-picker";
 import { FIREBASE_STORAGE, FIREBASE_FIRESTORE } from "@/Configurations/FirebaseConfig";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import createItem from "@/app/services/item";
+import {createItem} from "@/app/services/item";
 
 
 
@@ -13,18 +13,17 @@ const AddProduct = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [freeStat, setFreeStat] = useState("");
-  const [img, setImg] = useState<string | null>(null);
+  const [imgs, setImgs] = useState<string[]>([]);
 
   const [type, setType] = useState("free");
-  const [imageUri, setImageUri] =  useState<string[]>([]); // for making blob
-  // Explicitly set photos to be an array of strings (URIs)
-  const [photos, setPhotos] = useState<string[]>([]); // for UI
+  const [imageUris, setImageUris] =  useState<string[]>([]); // for making blob
+  const [photos, setPhotos] = useState<string[]>([]); // photos array for UI
 
   // Function to pick an image from the library
   const pickImage = async () => {
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (permissionResult.granted === false) {
+    if (!permissionResult.granted) {
       alert("Permission to access camera roll is required!");
       return;
     }
@@ -39,30 +38,37 @@ const AddProduct = () => {
     // Make sure `result.assets` exists and is not empty
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setPhotos((prevPhotos) => [...prevPhotos, result.assets[0].uri]);
-      //setImageUri(result.assets[0].uri); // need to fix this cause its an array now?
+      setImageUris((prevUris) => [...prevUris, result.assets[0].uri]); // array of image URIs
     }
   };
 
   const uploadData = async () => {
 
-    if (!imageUri) return;
+    if (!imageUris || imageUris.length===0) return;
 
-    // fix imageUri to go one per array image?
-    const response = await fetch(imageUri);
-    const blob = await response.blob();
+    console.log( "uris:" + imageUris);
 
-    const fileName = `images/${Date.now()}.jpg`;
-    const storageRef = ref(FIREBASE_STORAGE, fileName);
-    await uploadBytes(storageRef, blob);
-    const downloadUrl = await getDownloadURL(storageRef);
-    setImg(downloadUrl);
+    let uploadedImages: string[] = [];
 
-    if(!img) return;
+    // upload every image and store the reference
+    for(var imageUri of imageUris) {
+      const response = await fetch(imageUri);
 
-    await createItem({ title, img, description, freeStat:false})
+      const blob = await response.blob();
+      const fileName = `images/${Date.now()}.jpg`;
+      const storageRef = ref(FIREBASE_STORAGE, fileName);
+      await uploadBytes(storageRef, blob);
+
+      const downloadUrl = await getDownloadURL(storageRef);
+      uploadedImages.push(downloadUrl);
+    }
+
+
+    if(!uploadedImages || uploadedImages.length === 0) return;
+    console.log("uploaded imgs: " +uploadedImages);
+    await createItem({ title, imgs: uploadedImages, description, freeStat:false})
 
   }
-
 
   const handleSubmit = async () => {
 
@@ -83,6 +89,8 @@ const AddProduct = () => {
     setDescription("");
     setType("free");
     setPhotos([]);
+    setImgs([]);
+    setImageUris([]);
   };
 
   return (
