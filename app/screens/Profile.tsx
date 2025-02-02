@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: "bold",
         color: '#FFF6DA',
-        transform: [{translateY: -25}],
+        // transform: [{translateY: -25}],
         fontFamily: 'Cabin'
     },
     majorText: {

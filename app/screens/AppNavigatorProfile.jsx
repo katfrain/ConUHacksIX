@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Profile from "./Profile";
-import Post from "../Post"; // Or any other detailed screen
+import Post from "../Components/Post";
 
 const Stack = createStackNavigator();
 

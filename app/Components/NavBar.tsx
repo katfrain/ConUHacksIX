@@ -3,13 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {View, Text, StyleSheet} from 'react-native';
 import { Image } from 'react-native';
 import Home from '../screens/Home'
-import Search from '../screens/Search'
 import AddProduct from '../screens/AddProduct'
 import Messages from '../screens/Messages'
-import Profile from '../screens/Profile'
 import AppNavigatorProfile from "@/app/screens/AppNavigatorProfile";
 import AppNavigatorSearch from "@/app/screens/AppNavigatorSearch";
-
 
 const Tab = createBottomTabNavigator();
 

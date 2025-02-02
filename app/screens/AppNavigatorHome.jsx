@@ -1,16 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "../HomeScreen";
-import Post from "../Post";
+import HomeScreen from "./HomeScreen";
+import Post from "../Components/Post";
 
 const Stack = createStackNavigator();
 
-const AppNavigator = () => {
+const AppNavigatorHome = () => {
   return (
       <Stack.Navigator
           screenOptions={{
               headerStyle: {
-                  backgroundColor: "#545E66", // Background color of the header
+                  backgroundColor: "#545E66",
               },
               headerTitleStyle: {
                   fontSize: 20,
@@ -19,7 +19,7 @@ const AppNavigator = () => {
                   fontFamily: 'FredokaOne_400Regular',
               },
               headerBackTitleStyle: {
-                  fontFamily: 'CabinAppNavigator.jsx', // Ensures back button text uses the same font
+                  fontFamily: 'CabinAppNavigator.jsx',
                   fontSize: 18,
               },
               headerTintColor: "#85A3BD",
@@ -35,4 +35,4 @@ const AppNavigator = () => {
   );
 };
 
-export default AppNavigator;
+export default AppNavigatorHome;

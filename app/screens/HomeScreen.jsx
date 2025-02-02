@@ -1,8 +1,7 @@
 import React from "react";
 import {Image, FlatList, SafeAreaView, StyleSheet, View, Text, TouchableOpacity} from "react-native";
-import ItemCardTest from "../components/itemCartTest";
-import {ITEMS} from "../data-temp/items.jsx";
-import {  useFonts, FredokaOne_400Regular } from '@expo-google-fonts/fredoka-one';
+import ItemCardTest from "../../components/itemCartTest";
+import {ITEMS} from "../../data-temp/items.jsx";
 
 const HomeScreen = () => {
     return (
@@ -10,7 +9,7 @@ const HomeScreen = () => {
             <View style={{
                 height: 200,
             }}>
-                <Image source={require("@/assets/images/marketplaceImage.png")} />
+                <Image source={require("assets/images/marketplaceImage.png")} />
                 <Text
                     style={{ color: '#FFF6DA', fontSize: 24, transform: [{ translateY: -100 }], marginHorizontal: 50, fontFamily: 'FredokaOne_400Regular'}}
                 >What are you looking for today?</Text>

@@ -45,7 +45,7 @@ const AddProduct = () => {
       title,
       description,
       type,
-      photo: photos, // Save an array of photo URIs
+      photo: photos,
     };
 
     console.log("New product created:", newProduct);

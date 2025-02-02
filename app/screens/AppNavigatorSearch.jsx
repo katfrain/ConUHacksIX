@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "./Search.jsx";
-import Post from "../Post";
+import Post from "../Components/Post";
 
 const Stack = createStackNavigator();
 
