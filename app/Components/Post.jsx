@@ -7,7 +7,7 @@ const imageSize = width * 0.8;
 const spacing = 10;
 let username = "camikin";
 let name = "Cami Kin";
-let profileImage =  require("../assets/images/camikin.png");
+let profileImage =  require("../../assets/images/camikin.png");
 
 const Post = ({ route }) => {
   const { item } = route.params;
@@ -92,16 +92,16 @@ const styles = StyleSheet.create({
     marginVertical:20,
   },
   profileContainer: {
-    flexDirection: "row", // Places items side by side
-    alignItems: "center", // Aligns vertically in the center
+    flexDirection: "row",
+    alignItems: "center",
     padding: 10,
     marginHorizontal: 30,
   },
   profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25, // Makes it circular
-    marginRight: 10, // Adds space between image and text
+    borderRadius: 25,
+    marginRight: 10,
   },
   profileText: {
     fontSize: 18,
