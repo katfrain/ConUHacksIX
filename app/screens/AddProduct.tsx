@@ -127,6 +127,7 @@ const AddProduct = () => {
 
       {/* Button to add photos */}
       <Button title="Add Photo" onPress={pickImage} />
+      <Button title="Submit Post" onPress={handleSubmit} />
 
       {/* Preview selected photos */}
       {photos.length > 0 && (
@@ -137,7 +138,7 @@ const AddProduct = () => {
         </ScrollView>
       )}
 
-      <Button title="Submit Post" onPress={handleSubmit} />
+
     </View>
   );
 };

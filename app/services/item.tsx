@@ -1,4 +1,4 @@
-import {getFirestore, collection, addDoc, getDocs, QuerySnapshot} from 'firebase/firestore';
+import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
 
@@ -11,6 +11,7 @@ interface Props {
 
 const now = new Date();
 const time =  Date.now();
+
 
 export async function createItem({title,imgs,description,free}:Props){
 
@@ -39,7 +40,7 @@ interface ItemType {
     title: string;
     date: string;
     time: string;
-    img: string;
+    imgs: string[];
     description: string;
     freestat: boolean;
 }
@@ -57,7 +58,7 @@ export async function pullItem(): Promise<ItemType[]> {
         const items: ItemType[] = [];
 
         //querySnapshot.forEach((doc) => {
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 10; i++) {
             console.log ("Block statement execution no." + i);
             const doc = docs[i];
             const data = doc.data() as ItemType;
@@ -73,4 +74,46 @@ export async function pullItem(): Promise<ItemType[]> {
         console.log('error pulling document', error);
         return [];
     }
+
 }
+export async function pullUserItem(): Promise<ItemType[]> {
+    try {
+        const auth = getAuth()
+        const user = auth.currentUser
+        //this pulls the collection
+        const itemsRef = collection(db, 'items');
+        //pulls a snapshot of the collection
+
+        if(!user){
+            return [];
+        }
+
+        const q = user.email !== '' ? query(itemsRef, where('User', '==', user.email)) : itemsRef;
+        const querySnapshot = await getDocs(q);
+
+        const docs = querySnapshot.docs;
+
+        const items: ItemType[] = [];
+
+        //querySnapshot.forEach((doc) => {
+        for (let i = 0; i < 10; i++) {
+            console.log ("Block statement execution no." + i);
+            const doc = docs[i];
+            const data = doc.data() as ItemType;
+            items.push({
+                id: doc.id,
+                ...data,
+            });
+        }
+        console.log('Retrieved Items:', items);
+        return items;
+
+    } catch (error) {
+        console.log('error pulling document', error);
+        return [];
+    }
+
+}
+
+
+
