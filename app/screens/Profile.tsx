@@ -24,7 +24,6 @@ const MyPostsScreen = () => {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
 
-    // Function to fetch posts
     const fetchPosts = async () => {
         setLoading(true);
         const fetchedItems = await pullUserItem();
@@ -32,19 +31,16 @@ const MyPostsScreen = () => {
         setLoading(false);
     };
 
-    // Fetch posts on mount
     useEffect(() => {
         fetchPosts();
     }, []);
 
-    // Refresh function for pull-down gesture
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
         await fetchPosts();
         setRefreshing(false);
     }, []);
 
-    // Post item component
     const PostItem = ({ items }: { items: ItemType }) => (
         <View style={styles.postContainer}>
             <Text style={styles.title}>{items.title}</Text>
