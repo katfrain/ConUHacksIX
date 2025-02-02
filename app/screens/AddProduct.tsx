@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet,
+import {View, Text, TextInput, Button, TouchableOpacity, Image, StyleSheet, ScrollView
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { FIREBASE_STORAGE, FIREBASE_FIRESTORE } from "@/Configurations/FirebaseConfig";
@@ -16,8 +16,9 @@ const AddProduct = () => {
   const [img, setImg] = useState<string | null>(null);
 
   const [type, setType] = useState("free");
-  const [photo, setPhoto] = useState<string | null>(null); // for UI
-  const [imageUri, setImageUri] = useState<string | null>(null); // for making blob
+  const [imageUri, setImageUri] =  useState<string[]>([]); // for making blob
+  // Explicitly set photos to be an array of strings (URIs)
+  const [photos, setPhotos] = useState<string[]>([]); // for UI
 
   // Function to pick an image from the library
   const pickImage = async () => {
@@ -28,24 +29,25 @@ const AddProduct = () => {
       return;
     }
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
 
-    if(!result.canceled && result.assets && result.assets.length > 0) {
-      setPhoto(result.assets[0].uri);
-      setImageUri(result.assets[0].uri);
+    // Make sure `result.assets` exists and is not empty
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setPhotos((prevPhotos) => [...prevPhotos, result.assets[0].uri]);
+      //setImageUri(result.assets[0].uri); // need to fix this cause its an array now?
     }
-
   };
 
   const uploadData = async () => {
 
     if (!imageUri) return;
 
+    // fix imageUri to go one per array image?
     const response = await fetch(imageUri);
     const blob = await response.blob();
 
@@ -61,9 +63,17 @@ const AddProduct = () => {
 
   }
 
+
   const handleSubmit = async () => {
 
     await uploadData();
+
+    const newProduct = {
+      title,
+      description,
+      type,
+      photo: photos, // Save an array of photo URIs
+    };
 
     console.log("New product created:", title);
 
@@ -72,8 +82,7 @@ const AddProduct = () => {
     setTitle("");
     setDescription("");
     setType("free");
-    setPhoto(null);
-    alert("Successfully uploaded!");
+    setPhotos([]);
   };
 
   return (
@@ -95,13 +104,40 @@ const AddProduct = () => {
         multiline
       />
 
-      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
-        {photo ? (
-          <Image source={{ uri: photo }} style={styles.photo} />
-        ) : (
-          <Text style={styles.imagePickerText}>Pick an Image</Text>
-        )}
-      </TouchableOpacity>
+      {/* Type selection */}
+      <View style={styles.typeContainer}>
+        <Text style={styles.label}>Type:</Text>
+        <TouchableOpacity
+          style={[
+            styles.typeButton,
+            type === "free" && styles.typeButtonSelected,
+          ]}
+          onPress={() => setType("free")}
+        >
+          <Text style={styles.typeButtonText}>Free</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.typeButton,
+            type === "trade" && styles.typeButtonSelected,
+          ]}
+          onPress={() => setType("trade")}
+        >
+          <Text style={styles.typeButtonText}>Trade</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Button to add photos */}
+      <Button title="Add Photo" onPress={pickImage} />
+
+      {/* Preview selected photos */}
+      {photos.length > 0 && (
+        <ScrollView horizontal style={styles.photoPreviewContainer}>
+          {photos.map((uri, index) => (
+            <Image key={index} source={{ uri }} style={styles.photoPreview} />
+          ))}
+        </ScrollView>
+      )}
 
       <Button title="Submit Post" onPress={handleSubmit} />
     </View>
@@ -131,23 +167,37 @@ const styles = StyleSheet.create({
     height: 100,
     textAlignVertical: "top",
   },
-  imagePicker: {
+  typeContainer: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    height: 150,
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 16,
+    marginRight: 10,
+  },
+  typeButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
-    marginBottom: 15,
+    marginRight: 10,
   },
-  imagePickerText: {
+  typeButtonSelected: {
+    backgroundColor: "#ddd",
+  },
+  typeButtonText: {
     fontSize: 16,
-    color: "#666",
   },
-  photo: {
-    width: "100%",
-    height: "100%",
+  photoPreviewContainer: {
+    marginVertical: 15,
+  },
+  photoPreview: {
+    width: 100,
+    height: 100,
     borderRadius: 5,
+    marginRight: 10,
   },
 });
 
