@@ -8,6 +8,7 @@ import AddProduct from '../screens/AddProduct'
 import Messages from '../screens/Messages'
 import Profile from '../screens/Profile'
 import AppNavigatorProfile from "@/app/screens/AppNavigatorProfile";
+import AppNavigatorSearch from "@/app/screens/AppNavigatorSearch";
 
 
 const Tab = createBottomTabNavigator();
@@ -55,7 +56,7 @@ function NavBar() {
             />
             <Tab.Screen
                 name="Search"
-                component={Search}
+                component={AppNavigatorSearch}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <View style={{alignItems: 'center', justifyContent: 'center'}}>
