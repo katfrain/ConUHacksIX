@@ -22,11 +22,11 @@ export default function Index() {
             setLoading(false);
         });
 
-        return unsubscribe; // Cleanup function to prevent memory leaks
+        return unsubscribe;
     }, []);
 
     if (loading) {
-        return null; // Or a loading spinner
+        return null; // or a loading spinner
     }
 
     return (
