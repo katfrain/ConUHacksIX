@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import AppNavigator from "./screens/AppNavigator";
+import AppNavigator from "./AppNavigator";
 
 export default function Home() {
   return (

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Text, View } from "react-native";
-import NavBar from "./NavBar";
+import NavBar from "./Components/NavBar";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
   NavigationContainer,
