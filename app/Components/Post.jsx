@@ -11,9 +11,16 @@ let profileImage =  require("../../assets/images/camikin.png");
 
 const Post = ({ route }) => {
   const { item } = route.params;
-  const containerColor = item.type === "trade" ? "#D0845F" : "#40A671";
+  const containerColor = item.freestat ? "#D0845F" : "#40A671";
+  const username = item.email;
 
-  const photos = Array.isArray(item.photo) ? item.photo : [item.photo];
+  let photos = [];
+
+  if(item.imgs){
+    for(var img of item.imgs){
+      photos.push(img);
+    }
+  }
 
   return (
       <SafeAreaView style={styles.container}>
@@ -32,7 +39,7 @@ const Post = ({ route }) => {
                     style={{ marginRight: index === photos.length - 1 ? 0 : spacing }}
                 >
                   <Image
-                      source={photo}
+                      source={{uri: photo}}
                       style={[styles.image, { width: imageSize, height: imageSize }]}
                   />
                 </View>
