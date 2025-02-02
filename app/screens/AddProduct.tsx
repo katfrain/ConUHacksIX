@@ -7,15 +7,11 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {createItem} from "@/app/services/item";
 
 
-
 const AddProduct = () => {
   // for product doc (firebase)
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [freeStat, setFreeStat] = useState("");
-  const [imgs, setImgs] = useState<string[]>([]);
-
-  const [type, setType] = useState("free");
+  const [free, setFree] = useState(true);
   const [imageUris, setImageUris] =  useState<string[]>([]); // for making blob
   const [photos, setPhotos] = useState<string[]>([]); // photos array for UI
 
@@ -66,7 +62,7 @@ const AddProduct = () => {
 
     if(!uploadedImages || uploadedImages.length === 0) return;
     console.log("uploaded imgs: " +uploadedImages);
-    await createItem({ title, imgs: uploadedImages, description, freeStat:false})
+    await createItem({ title, imgs: uploadedImages, description, free})
 
   }
 
@@ -74,23 +70,17 @@ const AddProduct = () => {
 
     await uploadData();
 
-    const newProduct = {
-      title,
-      description,
-      type,
-      photo: photos, // Save an array of photo URIs
-    };
-
     console.log("New product created:", title);
 
-
-    // Reset form
+    // reset form
     setTitle("");
     setDescription("");
-    setType("free");
+    setFree(true);
     setPhotos([]);
-    setImgs([]);
     setImageUris([]);
+
+    alert("Product \"" + title + "\" added successfully! \n Look for it in your profile.");
+
   };
 
   return (
@@ -118,18 +108,18 @@ const AddProduct = () => {
         <TouchableOpacity
           style={[
             styles.typeButton,
-            type === "free" && styles.typeButtonSelected,
+            free === true && styles.typeButtonSelected,
           ]}
-          onPress={() => setType("free")}
+          onPress={() => setFree(true)}
         >
           <Text style={styles.typeButtonText}>Free</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.typeButton,
-            type === "trade" && styles.typeButtonSelected,
+            free === false && styles.typeButtonSelected,
           ]}
-          onPress={() => setType("trade")}
+          onPress={() => setFree(false)}
         >
           <Text style={styles.typeButtonText}>Trade</Text>
         </TouchableOpacity>

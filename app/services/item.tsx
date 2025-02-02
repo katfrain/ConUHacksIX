@@ -6,13 +6,13 @@ interface Props {
     title: string;
     imgs: string[];
     description: string;
-    freeStat: boolean;
+    free: boolean;
 }
 
 const now = new Date();
 const time =  Date.now();
 
-export async function createItem({title,imgs,description,freeStat}:Props){
+export async function createItem({title,imgs,description,free}:Props){
 
     try {
         const auth = getAuth()
@@ -25,7 +25,7 @@ export async function createItem({title,imgs,description,freeStat}:Props){
             Time: time.toString(),
             imgs: imgs,
             description: description,
-            freeStat: freeStat,
+            freeStat: free,
         });
         console.log("stuff was sent")
     } catch (error) {
