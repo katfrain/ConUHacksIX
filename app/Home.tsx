@@ -1,11 +1,11 @@
-import React from "react";
+import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import HomeScreen from "@/Screens/HomeScreen";
+import AppNavigator from "./AppNavigator";
 
-export default function Index() {
+export default function Home() {
   return (
     <View style={styles.container}>
-      <HomeScreen />
+      <AppNavigator />
     </View>
   );
 }
