@@ -7,6 +7,8 @@ import {collection, query, where, getDocs, QuerySnapshot} from 'firebase/firesto
 import {pullUserItem} from "@/app/services/UserService";
 import {ITEMS} from "@/data-temp/items";
 import ItemCardTest from "@/components/itemCartTest";
+import {useNavigation} from "@react-navigation/native";
+import ProfileItemCart from "@/components/profileItemCart";
 
 let username = "camikin";
 let name = "Cami Kin";
@@ -25,6 +27,8 @@ interface ItemType {
 }
 
 const MyPostsScreen = () => {
+
+
     const [items, setItems] = useState<ItemType[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -40,33 +44,39 @@ const MyPostsScreen = () => {
         fetchPosts();
     }, []);
 
+    // const navigation = useNavigation();
+    // const handlePress = () => {
+    //     navigation.navigate("Post", {items});
+    // };
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true);
         await fetchPosts();
         setRefreshing(false);
     }, []);
 
-    const PostItem = ({ items }: { items: ItemType }) => (
-        <View style={styles.postContainer}>
-            <Text style={styles.title}>{items.title}</Text>
-            <Text style={styles.description}>{items.description}</Text>
-            <Text style={styles.date}>{items.date} - {items.time}</Text>
-
-            {/* Display images if available */}
-            {items.imgs && items.imgs.length > 0 ? (
-                <FlatList
-                    data={items.imgs}
-                    keyExtractor={(item, index) => index.toString()}
-                    horizontal
-                    renderItem={({ item }) => (
-                        <Image source={{ uri: item }} style={styles.image} />
-                    )}
-                />
-            ) : (
-                <Text>No images available</Text>
-            )}
-        </View>
-    );
+    //const PostItem = ({ items }: { items: ItemType }) => (
+    // const PostItem = ({ items}: { items: ItemType }) => (
+    //     <View style={styles.postContainer}>
+    //         <Text style={styles.title}>{items.title}</Text>
+    //         <Text style={styles.description}>{items.description}</Text>
+    //         <Text style={styles.date}>{items.date} - {items.time}</Text>
+    //
+    //         {/* Display images if available */}
+    //         {items.imgs && items.imgs.length > 0 ? (
+    //             <FlatList
+    //                 data={items.imgs}
+    //                 keyExtractor={(item, index) => index.toString()}
+    //                 horizontal
+    //                 renderItem={({ item }) => (
+    //                     <Image source={{ uri: item }} style={styles.image} />
+    //                 )}
+    //             />
+    //         ) : (
+    //             <Text>No images available</Text>
+    //         )}
+    //     </View>
+    // );
 
     return (
         <View style={styles.container}>
@@ -94,7 +104,7 @@ const MyPostsScreen = () => {
                 <FlatList
                     data={items}
                     keyExtractor={(item) => (item.id ? item.id.toString() : '')}
-                    renderItem={({ item }) => <PostItem items={item} />}
+                    renderItem={({ item }) => <ProfileItemCart item={item} />}
                     refreshControl={
                         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                     }

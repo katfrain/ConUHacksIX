@@ -20,13 +20,13 @@ import {pullNonUserItem} from "@/app/services/nonUserService";
 
 export const HomeScreen = () => {
 
-    // 1) Define all state variables *at the top level* of the component
+
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [refreshing, setRefreshing] = useState(false);
 
-    // 2) Define the async function inside the component
+
     const fetchData = async () => {
         try {
             const retrievedItems = await pullNonUserItem();
@@ -38,7 +38,7 @@ export const HomeScreen = () => {
         }
     };
 
-    // 3) useEffect calls `fetchData` on mount
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -49,7 +49,7 @@ export const HomeScreen = () => {
         setRefreshing(false);
     }, []);
 
-    // 4) Handle loading or error states
+
     if (loading) {
         return (
             <SafeAreaView style={styles.container}>
