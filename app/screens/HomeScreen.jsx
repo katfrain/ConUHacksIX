@@ -68,7 +68,7 @@ export const HomeScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{
-                height: 170,
+                height: 148,
             }}>
                 <Image source={require("@/assets/images/marketplaceImage.png")}/>
                 <Text

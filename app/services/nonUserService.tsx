@@ -1,4 +1,4 @@
-import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query} from 'firebase/firestore';
+import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query, orderBy} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
 
@@ -11,7 +11,9 @@ interface ItemType2 {
     imgs: string[];
     description: string;
     freeStat: boolean;
+
 }
+
 
 export async function pullNonUserItem(): Promise<ItemType2[]> {
     try {
@@ -24,8 +26,9 @@ export async function pullNonUserItem(): Promise<ItemType2[]> {
         if(!user){
             return [];
         }
-
-        const q = user.email !== '' ? query(itemsRef, where('User', '!=', user.email)) : itemsRef;
+        const q =
+            query(itemsRef,
+            orderBy('createdAt', 'desc'))
         const querySnapshot = await getDocs(q);
 
         const docs = querySnapshot.docs;
@@ -42,7 +45,8 @@ export async function pullNonUserItem(): Promise<ItemType2[]> {
         }
 
         console.log('Retrieved Items:', items);
-        return items;
+        const filteredItems = items.filter(item => item.User !== user?.email)
+        return filteredItems;
 
     } catch (error) {
         console.log('error pulling document', error);

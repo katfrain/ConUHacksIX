@@ -1,6 +1,7 @@
-import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query} from 'firebase/firestore';
+import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query, serverTimestamp} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
+
 
 interface Props {
     title: string;
@@ -23,10 +24,11 @@ export async function createItem({title,imgs,description,free}:Props){
             User: user? (user.email) : null,
             title: title,
             Date: now.toString(),
-            Time: time.toString(),
+            time: time.toString(),
             imgs: imgs,
             description: description,
             freeStat: free,
+            createdAt: serverTimestamp(),
         });
         console.log("stuff was sent")
     } catch (error) {

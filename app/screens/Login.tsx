@@ -17,7 +17,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "@firebase/auth";
-const emailRegex = /^[a-zA-Z0-9._%+-]+@live.concordia\.ca$/;
+const emailRegex = /^[a-zA-Z0-9._%+-]+@(?:live\.)?concordia\.ca$/;
 import {
   useFonts,
   FredokaOne_400Regular,
@@ -42,6 +42,11 @@ const Login = () => {
 
   const signIn = async () => {
     setLoading(true);
+    if (!emailRegex.test(email)) {
+      alert("Email address ending in @concordia.ca is required!");
+      setLoading(false);
+      return;
+    }
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
       console.log(response);
@@ -104,15 +109,16 @@ const Login = () => {
           <TextInput
             value={email}
             style={styles.input}
-            placeholder={"netname@concordia.ca"}
+            placeholder={"netname@live.concordia.ca"}
             autoCapitalize={"none"}
             onChangeText={(text) => setEmail(text)}
-            onBlur={() => {
-              if (!emailRegex.test(email)) {
-                alert("Email address ending in @concordia.ca is required!");
-                setEmail("");
-              }
-            }}
+            // onBlur={() => {
+            //   if (!emailRegex.test(email)) {
+            //     console.log(email);
+            //     alert("Email address ending in @concordia.ca is required!");
+            //     //setEmail("");
+            //   }
+            //}}
           ></TextInput>
           <TextInput
             value={password}

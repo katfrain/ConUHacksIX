@@ -31,8 +31,8 @@ export async function pullUserItem(): Promise<ItemType1[]> {
 
         const docs = querySnapshot.docs;
 
-        const items: ItemType1[] = [];
 
+        const items: ItemType1[] = [];
         //querySnapshot.forEach((doc) => {
         for(var doc of docs){
             const data = doc.data() as ItemType1;
