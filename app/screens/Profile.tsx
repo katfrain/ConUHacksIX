@@ -4,7 +4,7 @@ import {db, FIREBASE_AUTH} from "@/Configurations/FirebaseConfig";
 import {useEffect, useState, useCallback} from "react";
 import {getAuth} from "firebase/auth";
 import {collection, query, where, getDocs, QuerySnapshot} from 'firebase/firestore';
-import {pullUserItem} from "@/app/services/item";
+import {pullUserItem} from "@/app/services/UserService";
 import {ITEMS} from "@/data-temp/items";
 import ItemCardTest from "@/components/itemCartTest";
 
@@ -21,7 +21,7 @@ interface ItemType {
     time: string;
     imgs: string[];
     description: string;
-    freestat: boolean;
+    freeStat: boolean;
 }
 
 const MyPostsScreen = () => {

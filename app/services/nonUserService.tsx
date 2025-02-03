@@ -1,9 +1,8 @@
-
 import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
 
-interface ItemType1 {
+interface ItemType2 {
     id?: string; // We'll add the document ID here
     User: string
     title: string;
@@ -14,7 +13,7 @@ interface ItemType1 {
     freeStat: boolean;
 }
 
-export async function pullUserItem(): Promise<ItemType1[]> {
+export async function pullNonUserItem(): Promise<ItemType2[]> {
     try {
         const auth = getAuth()
         const user = auth.currentUser
@@ -26,21 +25,22 @@ export async function pullUserItem(): Promise<ItemType1[]> {
             return [];
         }
 
-        const q = user.email !== '' ? query(itemsRef, where('User', '==', user.email)) : itemsRef;
+        const q = user.email !== '' ? query(itemsRef, where('User', '!=', user.email)) : itemsRef;
         const querySnapshot = await getDocs(q);
 
         const docs = querySnapshot.docs;
 
-        const items: ItemType1[] = [];
+        const items: ItemType2[] = [];
 
         //querySnapshot.forEach((doc) => {
         for(var doc of docs){
-            const data = doc.data() as ItemType1;
+            const data = doc.data() as ItemType2;
             items.push({
                 id: doc.id,
                 ...data,
             });
         }
+
         console.log('Retrieved Items:', items);
         return items;
 
@@ -48,5 +48,4 @@ export async function pullUserItem(): Promise<ItemType1[]> {
         console.log('error pulling document', error);
         return [];
     }
-
 }
