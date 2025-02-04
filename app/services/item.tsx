@@ -1,7 +1,8 @@
 import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query, serverTimestamp} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
-
+// this is a test to c if the github bot works
+//thi is a test
 
 interface Props {
     title: string;
