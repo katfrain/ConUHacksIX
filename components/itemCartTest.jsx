@@ -4,38 +4,37 @@ import { useNavigation } from "@react-navigation/native";
 
 const ItemCardTest = ({ item }) => {
   const navigation = useNavigation();
-  const containerColor = item.type === "trade" ? "#D0845F" : "#40A671";
+  const containerColor = item.freeStat ? "#D0845F" : "#40A671";
 
   const handlePress = () => {
-    // Navigate to the post detail scren and pass the item as a parameter
     navigation.navigate("Post", { item });
   };
   return (
-    <TouchableOpacity
-      onPress={handlePress}
-      style={{ width: "47%", marginVertical: 10, marginHorizontal: 5 }}
-    >
-      <View style={styles.card}>
-        {/*<Image*/}
-        {/*  source={Array.isArray(item.photo) ? item.photo[0] : item.photo}*/}
-        {/*  style={styles.image}*/}
-        {/*/>*/}
-        {/*/!* Type Box placed below the image *!/*/}
-        {/*<View*/}
-        {/*  style={[styles.typeContainer, { backgroundColor: containerColor, borderRadius: 20 }]}*/}
-        {/*>*/}
-        {/*  <Text style={styles.type}>*/}
-        {/*    {item.type === "trade" ? "Trade" : "Free"}*/}
-        {/*  </Text>*/}
-        {/*</View>*/}
+      <TouchableOpacity
+          onPress={handlePress}
+          style={{ width: "47%", marginVertical: 10, marginHorizontal: 5 }}
+      >
+        <View style={styles.card}>
+          <Image
+              source={{uri: Array.isArray(item.imgs) ? item.imgs[0] : item.imgs}}
+              style={styles.image}
+          />
+          {/* Type Box placed below the image */}
+          <View
+              style={[styles.typeContainer, { backgroundColor: containerColor, borderRadius: 20 }]}
+          >
+            <Text style={styles.type}>
+              {item.freeStat ?  "Trade" : "Free"}
+            </Text>
+          </View>
 
-        {/*<View style={styles.infoContainer}>*/}
-        {/*  <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">*/}
-        {/*    {item.title}*/}
-        {/*  </Text>*/}
-        {/*</View>*/}
-      </View>
-    </TouchableOpacity>
+          <View style={styles.infoContainer}>
+            <Text style={styles.title} numberOfLines={1} ellipsizeMode="tail">
+              {item.title}
+            </Text>
+          </View>
+        </View>
+      </TouchableOpacity>
   );
 };
 
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     right: 10,
     borderRadius: 5,
   },
-  freestat: {
+  type: {
     fontSize: 16,
     fontWeight: "bold",
     color: "white",
