@@ -8,6 +8,11 @@ const ProfileItemCart = ({item}) => {
     const handlePress = () => {
         navigation.navigate("Post", {item});
     };
+    const formattedDate = item.createdAt.toDate().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+    });
     return (
         <TouchableOpacity
             onPress={handlePress}
@@ -15,7 +20,7 @@ const ProfileItemCart = ({item}) => {
             <View style={styles.postContainer}>
                 <Text style={styles.title}>{item.title}</Text>
                 <Text style={styles.description}>{item.description}</Text>
-                <Text style={styles.date}>{item.date} - {item.time}</Text>
+                <Text style={styles.date}>{formattedDate}</Text>
 
                 {/* Display images if available */}
                 {item.imgs && item.imgs.length > 0 ? (

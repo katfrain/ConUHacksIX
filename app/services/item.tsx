@@ -1,6 +1,8 @@
 import {getFirestore, collection, addDoc, getDocs, QuerySnapshot, where, query, serverTimestamp} from 'firebase/firestore';
 import {db} from '@/Configurations/FirebaseConfig'
 import {getAuth} from 'firebase/auth'
+import firebase from "firebase/compat";
+import Timestamp = firebase.firestore.Timestamp;
 
 
 interface Props {
@@ -45,6 +47,7 @@ interface ItemType {
     img: string;
     description: string;
     freeStat: boolean;
+    createdAt: Timestamp;
 }
 
 

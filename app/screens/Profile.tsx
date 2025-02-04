@@ -9,6 +9,8 @@ import {ITEMS} from "@/data-temp/items";
 import ItemCardTest from "@/components/itemCartTest";
 import {useNavigation} from "@react-navigation/native";
 import ProfileItemCart from "@/components/profileItemCart";
+import firebase from "firebase/compat";
+import Timestamp = firebase.firestore.Timestamp;
 
 let username = "camikin";
 let name = "Cami Kin";
@@ -24,6 +26,7 @@ interface ItemType {
     imgs: string[];
     description: string;
     freeStat: boolean;
+    createdAt: Timestamp;
 }
 
 const MyPostsScreen = () => {
